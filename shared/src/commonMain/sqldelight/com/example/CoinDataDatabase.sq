@@ -1,0 +1,27 @@
+CREATE TABLE CoinData (
+    id TEXT NOT NULL,
+    symbol TEXT NOT NULL,
+    name TEXT NOT NULL,
+    priceUsd TEXT NOT NULL,
+    changePercent24Hr TEXT NOT NULL
+);
+
+insertCoinData:
+INSERT INTO CoinData(id,symbol,name,priceUsd,changePercent24Hr)
+VALUES(?,?,?,?,?);
+
+upsert:
+INSERT OR REPLACE INTO CoinData
+VALUES ?;
+
+removeAllCoinData:
+DELETE FROM CoinData;
+
+selectAllCoinDataInfo:
+SELECT CoinData.*
+FROM CoinData;
+
+getCoinDataBySymbol:
+SELECT *
+FROM CoinData
+WHERE symbol = ?;
