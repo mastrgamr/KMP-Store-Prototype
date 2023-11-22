@@ -23,8 +23,9 @@ class CoinCapSourceOfTruthProvider(private val db: CoinDataDatabase) {
                     is CoinDataKey.Read.ByCoinSymbol -> {
                         val cpbVersionData =
                             db.coinDataDatabaseQueries.getCoinDataBySymbol(key.coinSymbol)
-                                .executeAsOneOrNull()
-                        if (cpbVersionData != null)
+                                .executeAsOne()
+                        println("cpbVersionData :: $cpbVersionData")
+//                        if (cpbVersionData != null)
                             emit(cpbVersionData)
                     }
                 }

@@ -11,6 +11,8 @@ import org.mobilenativefoundation.store.store5.StoreReadResponse
 import org.mobilenativefoundation.store.store5.StoreWriteRequest
 import org.mobilenativefoundation.store.store5.StoreWriteResponse
 
+private const val TAG = "CoinCapStoreRepository"
+
 interface CoinCapStoreRepository {
     suspend fun getCoinDataBySymbol(coinSymbol: String): CoinData
     fun stream(request: StoreReadRequest<CoinDataKey>): Flow<StoreReadResponse<CoinData>>
@@ -20,17 +22,20 @@ interface CoinCapStoreRepository {
 @OptIn(ExperimentalStoreApi::class)
 class CoinCapStoreRepositoryImpl(private val store: MutableStore<CoinDataKey, CoinData>) : CoinCapStoreRepository {
     override suspend fun getCoinDataBySymbol(coinSymbol: String): CoinData {
-        println("COINCAP STORE ==== $store")
-        val first = store.stream<CoinData>(StoreReadRequest.fresh(CoinDataKey.Read.ByCoinSymbol(coinSymbol))).first { storeReadResponse ->
-            println("STORE RESPONSE ==== $storeReadResponse")
-            storeReadResponse.dataOrNull()?.symbol == coinSymbol
-        }.requireData()
-        println("gottem :: $first") // null?!!
+        println("$TAG: COINCAP STORE ==== $store")
+        val first = store.stream<CoinData>(StoreReadRequest.fresh(CoinDataKey.Read.ByCoinSymbol(coinSymbol)))
+//        val first = store.stream<CoinData>(StoreReadRequest.fresh(CoinDataKey.Read.AllAgencies))
+            .first { storeReadResponse ->
+                println("$TAG: STORE RESPONSE ==== $storeReadResponse")
+                storeReadResponse.dataOrNull()?.symbol.equals(coinSymbol, true)
+            }.requireData()
+        println("$TAG: first :: $first") // null?!!
+
         return first
     }
 
     override fun stream(request: StoreReadRequest<CoinDataKey>): Flow<StoreReadResponse<CoinData>> {
-        println("COINCAP STORE ==== $store")
+        println("$TAG: COINCAP STORE ==== $store")
         return store.stream<CoinData>(request)
     }
 

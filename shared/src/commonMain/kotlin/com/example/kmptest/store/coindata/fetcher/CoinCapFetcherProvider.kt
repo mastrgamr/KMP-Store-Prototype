@@ -16,7 +16,6 @@ class CoinCapFetcherProvider(private val api: CoinCapApi) {
                 is RequestResult.Exception -> RequestResult.Exception(Throwable("Not Implemented"))
                 is RequestResult.Success -> {
                     val data = requestResult.data.coinDataList.first()
-                    println("FETCH SUCCESS ==== $key")
                     println("FETCH SUCCESS ==== $data")
                     RequestResult.Success(
                         CoinData(

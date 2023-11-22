@@ -1,7 +1,8 @@
 package com.example.kmptest.android
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kmptest.CoinCapStore
 import com.example.kmptest.DriverFactory
@@ -9,19 +10,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
+private const val TAG = "MainViewModel"
+class MainViewModel : ViewModel() {
 
-    private val coinCapStore = CoinCapStore(DriverFactory(this.getApplication()))
+    private lateinit var coinCapStore: CoinCapStore
 
     private val _coinPrice = MutableStateFlow("")
     val coinPrice: StateFlow<String> = _coinPrice
 
-    fun fetchCoinData() {
+    fun fetchCoinData(context: Context) { // TODO: inject via Koin
         viewModelScope.launch {
-            println("getting x ::")
+            coinCapStore = CoinCapStore(DriverFactory(context))
             val x = coinCapStore.store.getCoinDataBySymbol("btc")
             _coinPrice.value = x.priceUsd
-            println("x :: $x returned")
+            Log.i(TAG, "fetchCoinData x :: $x")
         }
     }
 }

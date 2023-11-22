@@ -8,7 +8,7 @@ sealed class CoinDataKey {
 
     sealed class Write : CoinDataKey() {
         data object Create : Write()
-        data class ByCoinSymbol(val agency: String, val region: String, val path: String) : Write()
+        data class ByCoinSymbol(val id: String, val symbol: String, val name: String, val priceUsd: String, val changePercent24Hr: String,) : Write()
     }
 
     sealed class Clear : CoinDataKey() {
