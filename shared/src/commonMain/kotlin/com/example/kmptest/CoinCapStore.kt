@@ -11,6 +11,7 @@ class CoinCapStore(databaseDriverFactory: DriverFactory) {
     private val api = CoinCapApi()
     private val driver = databaseDriverFactory.createDriver()
     private val db = CoinDataDatabase(driver)
+
     private val _store = CoinCapStoreProvider(api, db).provide()
     val store = CoinCapStoreRepositoryImpl(_store)
 

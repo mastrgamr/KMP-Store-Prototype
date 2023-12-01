@@ -1,5 +1,5 @@
 CREATE TABLE CoinData (
-    id TEXT NOT NULL,
+    id TEXT PRIMARY KEY,
     symbol TEXT NOT NULL,
     name TEXT NOT NULL,
     priceUsd TEXT NOT NULL,

@@ -23,8 +23,7 @@ interface CoinCapStoreRepository {
 class CoinCapStoreRepositoryImpl(private val store: MutableStore<CoinDataKey, CoinData>) : CoinCapStoreRepository {
     override suspend fun getCoinDataBySymbol(coinSymbol: String): CoinData {
         println("$TAG: COINCAP STORE ==== $store")
-        val first = store.stream<CoinData>(StoreReadRequest.fresh(CoinDataKey.Read.ByCoinSymbol(coinSymbol)))
-//        val first = store.stream<CoinData>(StoreReadRequest.fresh(CoinDataKey.Read.AllAgencies))
+        val first = store.stream<CoinData>(StoreReadRequest.cached(CoinDataKey.Read.ByCoinSymbol(coinSymbol), refresh = false))
             .first { storeReadResponse ->
                 println("$TAG: STORE RESPONSE ==== $storeReadResponse")
                 storeReadResponse.dataOrNull()?.symbol.equals(coinSymbol, true)

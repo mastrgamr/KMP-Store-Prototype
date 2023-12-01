@@ -1,7 +1,6 @@
 package com.example.kmptest.android
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kmptest.CoinCapStore
@@ -18,12 +17,11 @@ class MainViewModel : ViewModel() {
     private val _coinPrice = MutableStateFlow("")
     val coinPrice: StateFlow<String> = _coinPrice
 
-    fun fetchCoinData(context: Context) { // TODO: inject via Koin
+    fun fetchCoinData(context: Context) { // TODO: inject Context via Koin?
         viewModelScope.launch {
             coinCapStore = CoinCapStore(DriverFactory(context))
-            val x = coinCapStore.store.getCoinDataBySymbol("btc")
+            val x = coinCapStore.store.getCoinDataBySymbol("BTC")
             _coinPrice.value = x.priceUsd
-            Log.i(TAG, "fetchCoinData x :: $x")
         }
     }
 }

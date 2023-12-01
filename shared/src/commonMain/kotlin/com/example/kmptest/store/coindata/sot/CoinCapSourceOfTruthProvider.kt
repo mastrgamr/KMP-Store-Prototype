@@ -10,7 +10,7 @@ class CoinCapSourceOfTruthProvider(private val db: CoinDataDatabase) {
     fun provide(): SourceOfTruth<CoinDataKey, CoinData, CoinData> = SourceOfTruth.of(
         reader = { key: CoinDataKey ->
             flow<CoinData> {
-                require(key is CoinDataKey.Read)
+                //require(key is CoinDataKey.Read)
                 println("BEFORE READ ==== $key")
                 when (key) {
                     is CoinDataKey.Read.AllAgencies -> {
@@ -28,22 +28,21 @@ class CoinCapSourceOfTruthProvider(private val db: CoinDataDatabase) {
 //                        if (cpbVersionData != null)
                             emit(cpbVersionData)
                     }
+                    else -> Unit
                 }
             }
         },
         writer = { key: CoinDataKey, coinData: CoinData ->
-            require(key is CoinDataKey.Write)
+            //require(key is CoinDataKey.Write)
             println("BEFORE WRITE ==== $key")
-            when (key) {
-                is CoinDataKey.Write.Create -> db.coinDataDatabaseQueries.upsert(coinData)
-                is CoinDataKey.Write.ByCoinSymbol -> db.coinDataDatabaseQueries.upsert(coinData)
-            }
+            db.coinDataDatabaseQueries.upsert(coinData)
         },
         delete = { key: CoinDataKey ->
-            require(key is CoinDataKey.Clear)
+            //require(key is CoinDataKey.Clear)
             when (key) {
                 is CoinDataKey.Clear.All -> db.coinDataDatabaseQueries.removeAllCoinData()
                 is CoinDataKey.Clear.ByCoinSymbol -> Unit
+                else -> Unit
             }
         },
         //deleteAll = db.postDao()::clearAllFeeds
